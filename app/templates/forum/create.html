@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Create New Post</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('posts.create') }}" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.category_id.label(class="form-label") }}
+                        {{ form.category_id(class="form-select" + (" is-invalid" if form.category_id.errors else "")) }}
+                        {% if form.category_id.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.category_id.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.content.label(class="form-label") }}
+                        {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else ""), rows=10) }}
+                        {% if form.content.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.cover_image.label(class="form-label") }}
+                        {{ form.cover_image(class="form-control", accept="image/*", id="cover_image") }}
+                        {% if form.cover_image.errors %}
+                            <div class="text-danger">
+                                {% for error in form.cover_image.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Optional. Max 5MB. Supported: JPG, PNG, GIF, WEBP</div>
+
+                        <!-- Image preview -->
+                        <div id="imagePreview" class="mt-2" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 300px;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Create Post</button>
+                    <a href="{{ url_for('forum.index') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+
+                <script>
+                document.getElementById('cover_image').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            document.getElementById('previewImg').src = event.target.result;
+                            document.getElementById('imagePreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

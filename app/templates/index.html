@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Welcome to BBS Forum</h1>
+
+        {% if not current_user.is_authenticated %}
+        <div class="alert alert-info">
+            <strong>New here?</strong> <a href="{{ url_for('auth.register') }}">Register</a> to start posting and join the discussion!
+        </div>
+        {% endif %}
+
+        <h2 class="mb-3">Categories</h2>
+
+        {% if categories %}
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    {% if category.cover_image %}
+                    <img src="{{ url_for('static', filename='uploads/categories/' + category.cover_image) }}"
+                         class="card-img-top"
+                         alt="{{ category.name }}"
+                         style="height: 150px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
+                         style="height: 150px;">
+                        <span class="text-white">No Image</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        {% if category.description %}
+                        <p class="card-text text-muted small">{{ category.description[:100] }}{% if category.description|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        <p class="card-text">
+                            <small class="text-muted">{{ category.post_count }} posts</small>
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>
+                            {% if category.latest_post %}
+                            Latest: <strong>{{ category.latest_post.title[:30] }}{% if category.latest_post.title|length > 30 %}...{% endif %}</strong>
+                            {% else %}
+                            No posts yet
+                            {% endif %}
+                        </small>
+                    </div>
+                    <a href="{{ url_for('forum.category', category_id=category.id) }}" class="stretched-link"></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+            <p class="mb-0">No categories available yet. {% if current_user.is_admin %}Go to the <a href="/admin">Admin Panel</a> to create some!{% endif %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
