@@ -26,6 +26,10 @@ class Config:
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB max file size
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
 
+    # Logging configuration
+    LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+    LOG_SQL_QUERIES = os.environ.get('LOG_SQL_QUERIES', 'False').lower() == 'true'
+
 
 class DevelopmentConfig(Config):
     """Development configuration"""

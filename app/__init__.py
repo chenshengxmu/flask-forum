@@ -25,8 +25,16 @@ def create_app(config_name='default'):
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
 
+    # Setup logging
+    from app.logging_config import setup_logging
+    setup_logging(app)
+
     # Import models here to avoid circular imports
     from app import models
+
+    # Register Jinja2 filters
+    from app.utils.sanitizer import sanitize_and_mark_safe
+    app.jinja_env.filters['safe_html'] = sanitize_and_mark_safe
 
     # Register blueprints
     from app.routes.auth import auth_bp

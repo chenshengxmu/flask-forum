@@ -13,9 +13,10 @@
 
         <h2 class="mb-3">Categories</h2>
 
-        {% if categories %}
+        {% if category_stats %}
         <div class="row">
-            {% for category in categories %}
+            {% for stat in category_stats %}
+            {% set category = stat.category %}
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
                     {% if category.cover_image %}
@@ -35,13 +36,13 @@
                         <p class="card-text text-muted small">{{ category.description[:100] }}{% if category.description|length > 100 %}...{% endif %}</p>
                         {% endif %}
                         <p class="card-text">
-                            <small class="text-muted">{{ category.post_count }} posts</small>
+                            <small class="text-muted">{{ stat.post_count }} posts</small>
                         </p>
                     </div>
                     <div class="card-footer text-muted">
                         <small>
-                            {% if category.latest_post %}
-                            Latest: <strong>{{ category.latest_post.title[:30] }}{% if category.latest_post.title|length > 30 %}...{% endif %}</strong>
+                            {% if stat.latest_post %}
+                            Latest: <strong>{{ stat.latest_post.title[:30] }}{% if stat.latest_post.title|length > 30 %}...{% endif %}</strong>
                             {% else %}
                             No posts yet
                             {% endif %}
